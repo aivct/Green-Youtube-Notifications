@@ -6,27 +6,20 @@
 // grey also works: #D3EEDD
 const GREEN_COLOUR_HEX = "#6B9797"; // trying to pick a relaxing color that fades into the background while still being readable
 
-const TIMEOUT = 1000;
-// infinite loop method, stupid but it works.
-setTimeout(checkNotification, TIMEOUT)
-function checkNotification()
+function injectCSS(rules)
 {
-	let notification = document.querySelector(".yt-spec-icon-badge-shape__badge");
-	if(notification)
-	{
-		// end if notification found.
-		changeNotificationColour(GREEN_COLOUR_HEX);
-	}
-	else 
-	{
-		setTimeout(checkNotification, TIMEOUT);
-	}
+	let style = document.createElement("style");
+	style.innerHTML = rules;
+	document.head.appendChild(style);
 }
 
-function changeNotificationColour(colour)
+// wait no I'm an idiot I can just override CSS.
+let overrideCSS = `
+.yt-spec-icon-badge-shape--type-notification .yt-spec-icon-badge-shape__badge
 {
-	// stupidly brittle method, but eh, it works.
-	let notification = document.querySelector(".yt-spec-icon-badge-shape__badge");
-	// cuz sometimes it's null 
-	if(notification) notification.style.background = colour;
+	background-color: ${GREEN_COLOUR_HEX};
 }
+
+`
+
+injectCSS(overrideCSS);
